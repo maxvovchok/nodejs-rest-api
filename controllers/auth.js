@@ -1,7 +1,9 @@
 const bcrypt = require("bcrypt")
+const jwt = require('jsonwebtoken')
 
 const {User} = require("../models/user");
 const { HttpError, controllerWrap } = require('../helpers');
+const {SECRET_KEY} = process.env;
 
 const register = async(req, res) => {
     const {email, password} = req.body;
@@ -32,7 +34,13 @@ const login = async(req, res) => {
     if (!passwordCompare) {
         throw  HttpError(401, "Email or password invalid")
     }
-    const token = "gerwgew.werrewt.wert34252345we"
+    
+    const payload = {
+        id: user._id,
+        
+    }
+    
+    const token = jwt.sign(payload, SECRET_KEY, {expiresIn: "24h"})
     
     res.json({
         token,
@@ -41,4 +49,5 @@ const login = async(req, res) => {
 
 module.exports = {
     register: controllerWrap(register),
+    login: controllerWrap(login)
 }
