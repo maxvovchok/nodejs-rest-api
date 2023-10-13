@@ -9,8 +9,7 @@ const contactSchema = new Schema(
       required: [true, 'Set name for contact'],
     },
     email: {
-      type: String, 
-        unique: true
+      type: String,
     },
     phone: {
       type: String,
@@ -18,11 +17,12 @@ const contactSchema = new Schema(
     favorite: {
       type: Boolean,
       default: false,
-    }, 
-      owner: {
-          type: Schema.Types.ObjectId,
-          ref: 'user',
-      }
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -37,7 +37,9 @@ const createSchema = Joi.object({
 });
 
 const updateFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required(),
+  favorite: Joi.boolean().required().messages({
+    'any.required': 'Missing field favorite',
+  }),
 });
 
 const schemas = {
