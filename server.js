@@ -1,18 +1,21 @@
-const app = require('./app');
-const mongoose = require('mongoose');
+const app = require("./app");
+const mongoose = require("mongoose");
+require("dotenv").config();
 
 const { DB_HOST, PORT } = process.env;
 
-mongoose.set('strictQuery', true);
 mongoose
   .connect(DB_HOST)
   .then(() => {
-    app.listen(PORT || 4444, () => {
-      console.log(`Server running. localhost:${PORT}`);
-    });
-    console.log('Database connect success');
+    console.log("Database connection successful");
   })
   .catch((error) => {
     console.log(error.message);
     process.exit(1);
   });
+
+const port = PORT || 7000;
+
+app.listen(port, () => {
+  console.log(`Server is up and running on port: ${port}`);
+});
